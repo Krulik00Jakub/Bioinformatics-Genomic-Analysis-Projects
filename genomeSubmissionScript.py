@@ -58,46 +58,28 @@ while i <= n:
 
     # ensures that the correct file extension is specified for each file, and submits files
     if fileExtension in mygenome:
-
-        multipart_data = MultipartEncoder(
-            fields={ "format_type": "GENBANK",
-                     'email_addr': email,
-        #  For incomplete genomes include a reference accession
-        #             'ref_accnum': 'NC_022792.1',
-                     'genome_file': ('filename', open(mygenome, 'rb'), 'text/plain')}
-        )
-        headers={'Content-Type': multipart_data.content_type,
-                 'x-authtoken': 'fbf55d36-ee4a-dc69-4cf8-db045cbd4b66'}
-
-        r = requests.post(server+ext, headers=headers, data=multipart_data)
-
-        if not r.ok:
-          r.raise_for_status()
-          sys.exit()
-
-        decoded = r.json()
-        print(repr(decoded))
-        i = i + 1
-        mygenome = None
-
+        extn = 'GENBANK'
     else:
-        multipart_data = MultipartEncoder(
-            fields={ "format_type": "EMBL",
-                        'email_addr': email,
-        #  For incomplete genomes include a reference accession
-        #             'ref_accnum': 'NC_022792.1',
-                        'genome_file': ('filename', open(mygenome, 'rb'), 'text/plain')}
-        )
-        headers={'Content-Type': multipart_data.content_type,
-                    'x-authtoken': 'fbf55d36-ee4a-dc69-4cf8-db045cbd4b66'}
+        extn = 'EMBL'
 
-        r = requests.post(server+ext, headers=headers, data=multipart_data)
 
-        if not r.ok:
-            r.raise_for_status()
-            sys.exit()
+    multipart_data = MultipartEncoder(
+        fields={ "format_type": extn,
+                    'email_addr': email,
+    #  For incomplete genomes include a reference accession
+    #             'ref_accnum': 'NC_022792.1',
+                    'genome_file': ('filename', open(mygenome, 'rb'), 'text/plain')}
+    )
+    headers={'Content-Type': multipart_data.content_type,
+                'x-authtoken': 'fbf55d36-ee4a-dc69-4cf8-db045cbd4b66'}
 
-        decoded = r.json()
-        print(repr(decoded))
-        i = i + 1
-        mygenome = None
+    r = requests.post(server+ext, headers=headers, data=multipart_data)
+
+    if not r.ok:
+        r.raise_for_status()
+        sys.exit()
+
+    decoded = r.json()
+    print(repr(decoded))
+    i = i + 1
+    mygenome = None
