@@ -71,7 +71,7 @@ while i <= n:
                     'genome_file': ('filename', open(mygenome, 'rb'), 'text/plain')}
     )
     headers={'Content-Type': multipart_data.content_type,
-                'x-authtoken': 'fbf55d36-ee4a-dc69-4cf8-db045cbd4b66'}
+                'x-authtoken': 'PUT YOUR AUTHENTICATION TOKEN HERE'}
 
     r = requests.post(server+ext, headers=headers, data=multipart_data)
 
